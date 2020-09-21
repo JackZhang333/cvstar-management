@@ -1,0 +1,21 @@
+.logo {
+    width: 64px;
+    height: 64px;
+    background:url('../assets/logo.png');
+    background-size: 64px;
+  
+    float: left;
+  }
+  
+  .site-layout-background {
+    background: #fff;
+  }
+  .home-wrapper {
+      height: 100vh;
+  }
+  .content-wrapper {
+      height: calc(100vh - 180px);
+  }
+  .ant-layout-header {
+      padding: 0 20px;
+  }
