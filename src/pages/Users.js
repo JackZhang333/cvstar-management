@@ -5,20 +5,7 @@ import './user.css'
 import {DownOutlined, ExclamationCircleOutlined} from '@ant-design/icons'
 
 const {RangePicker} = DatePicker;
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target='_blank' rel="noopener noreferrer" href="http://localhost:3000/home/userOrders">
-                用户订单
-            </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target='_blank' rel="noopener noreferrer" href="http://localhost:3000/home/userProducts">
-                用户商品
-            </a>
-        </Menu.Item>
-    </Menu>
-)
+
 const data = [
     {
         key:'1',
@@ -123,6 +110,20 @@ const data = [
 export default function Users(props){
     // const [form] = Form.useForm();
    const [filtedData,setFilted] = useState(data);
+   const menu = (
+    <Menu>
+        <Menu.Item>
+            <a rel="noopener noreferrer" href = 'http://localhost:3000/home/userOrders' target='_blank'>
+                用户订单
+            </a>
+        </Menu.Item>
+        <Menu.Item>
+            <a  rel="noopener noreferrer" href = 'http://localhost:3000/home/userOrders' target='_blank'>
+                用户商品
+            </a>
+        </Menu.Item>
+    </Menu>
+)
     const columns = [
         {
             title:'账号',

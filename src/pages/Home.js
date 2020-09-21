@@ -15,6 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 
 export default function Home(props) {
+
     const menuClick = (e) => {
         props.history.push(`/home/${e.key}`)
     }
@@ -32,20 +33,22 @@ export default function Home(props) {
                         defaultSelectedKeys={['users']}
                         style={{ height: '100%' }}
                         onClick={menuClick}
+                        selectedKeys = {props.location.pathname}
                     >
                         <Menu.Item key="users">用户管理</Menu.Item>
                         <Menu.Item key="products">商品库</Menu.Item>
 
                         <SubMenu key="sub1" title="数据统计">
-                            <Menu.Item key="userOrders">用户订单</Menu.Item>
-                            <Menu.Item key="userProducts">用户商品</Menu.Item>
+                            <Menu.Item key="userOrders" >用户订单</Menu.Item>
+                            <Menu.Item key="userProducts" >用户商品</Menu.Item>
                         </SubMenu>
                         <Menu.Item key="staffs">工作人员</Menu.Item>
                     </Menu>
                 </Sider>
                 <Content style={{ padding: '0 24px', minHeight: 280 }}>
                     <Switch>
-                        <Route path='/home/users' component={Users} />
+
+                        <Route path='/home/users' component={()=><Users />} />
                         <Route path='/home/products' component={Products} />
                         <Route path='/home/userProducts' component={UserProducts} />
                         <Route path='/home/userOrders' component={UserOrders} />
