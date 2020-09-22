@@ -110,20 +110,23 @@ const data = [
 export default function Users(props){
     // const [form] = Form.useForm();
    const [filtedData,setFilted] = useState(data);
-   const menu = (
+   const menu = (phone)=>{
+       const url1 = `http://localhost:3000/home/userOrders/${phone}`
+       const url2 = `http://localhost:3000/home/userProducts/${phone}`
+       return (
     <Menu>
         <Menu.Item>
-            <a rel="noopener noreferrer" href = 'http://localhost:3000/home/userOrders' target='_blank'>
+            <a rel="noopener noreferrer" href = {url1} target='_blank'>
                 用户订单
             </a>
         </Menu.Item>
         <Menu.Item>
-            <a  rel="noopener noreferrer" href = 'http://localhost:3000/home/userOrders' target='_blank'>
+            <a  rel="noopener noreferrer" href = {url2} target='_blank'>
                 用户商品
             </a>
         </Menu.Item>
     </Menu>
-)
+)}
     const columns = [
         {
             title:'账号',
@@ -175,7 +178,7 @@ export default function Users(props){
                     } href = {{javascript:0}}>
                         {record.status ? "停用" : "启用"}
                     </a>
-                    <Dropdown overlay = {menu}>
+                    <Dropdown overlay = {()=>menu(record.phone)}>
                         <a className = 'ant-dropdown-link' onClick = {e => e.preventDefault()} href = {{javascript:0}}>
                             查看<DownOutlined/>
                         </a>

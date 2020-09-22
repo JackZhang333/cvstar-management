@@ -17,7 +17,13 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Home(props) {
 
     const menuClick = (e) => {
-        props.history.push(`/home/${e.key}`)
+        if(e.key === 'userOrders'||e.key === 'userProducts'){
+            console.log('get it')
+            props.history.push(`/home/${e.key}/0`)
+        }else{
+            props.history.push(`/home/${e.key}/`)
+        }
+        
     }
     return <Layout className='home-wrapper'>
         <Header className="header">
@@ -50,8 +56,8 @@ export default function Home(props) {
 
                         <Route path='/home/users' component={()=><Users />} />
                         <Route path='/home/products' component={Products} />
-                        <Route path='/home/userProducts' component={UserProducts} />
-                        <Route path='/home/userOrders' component={UserOrders} />
+                        <Route path='/home/userProducts/:phone' component={UserProducts} />
+                        <Route path='/home/userOrders/:phone' component={UserOrders} />
                         <Route path='/home/staffs' component={Staffs} />
                     </Switch>
                 </Content>
