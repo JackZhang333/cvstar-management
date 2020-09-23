@@ -8,13 +8,15 @@ import UserOrders from './UserOrders';
 import Staffs from './Staffs';
 import { Route, Switch } from 'react-router-dom';
 import {ExclamationCircleOutlined,LogoutOutlined} from '@ant-design/icons'
+import {connect} from 'react-redux'
+
 const { Title } = Typography
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 
 
-export default function Home(props) {
+const Home = function(props) {
 
     const menuClick = (e) => {
         if (e.key === 'userOrders' || e.key === 'userProducts') {
@@ -32,7 +34,10 @@ export default function Home(props) {
             content: `确定要退出当前账号?`,
             okText: '退出登录',
             cancelText: '取消',
-            onOk: () => { props.history.push('/')}
+            onOk: () => { 
+                //改变数据状态
+                props.toLogout()
+                props.history.push('/login')}
         })
        
     }
@@ -78,3 +83,13 @@ export default function Home(props) {
         <Footer style={{ textAlign: 'center' }}>copyright 2020 杭州便利星信息科技有限公司 浙ICP备19025640</Footer>
     </Layout>
 }
+const mapStateToProps = (state)=>({
+    isLogin:state.isLogin
+})
+const mapDisptchToProps = (disptch)=>{
+    return {
+        toLogin:()=>disptch({type:'LOGIN'}),
+        toLogout:()=>disptch({type:'LOGOUT'}),
+    }
+}
+export default connect(mapStateToProps,mapDisptchToProps)(Home);

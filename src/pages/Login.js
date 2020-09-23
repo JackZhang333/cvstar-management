@@ -1,9 +1,9 @@
 import React from 'react';
-
+import {connect} from 'react-redux'
 import './login.css'
 import { message } from 'antd';
 
-export default class Home extends React.Component {
+const Login = class extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -46,8 +46,8 @@ export default class Home extends React.Component {
         }
     } 
     toLogin = () => {
-        console.log('跳转到home页')
-        console.log(this.props)
+        //改变store的数据状态
+        this.props.toLogin()
         this.props.history.push('/home/users')
     }
     render() {
@@ -63,7 +63,7 @@ export default class Home extends React.Component {
                             name="name"
                             className="item-input"
                             placeholder="请输入手机号"
-                            autocomplete="off"
+                            autoComplete="off"
                         />
                     </div>
                     <div className="item-wrapper">
@@ -73,7 +73,7 @@ export default class Home extends React.Component {
                             name="password"
                             className="item-input"
                             placeholder="请输入密码"
-                            autocomplete="off"
+                            autoComplete="off"
                         />
 
                     </div>
@@ -84,7 +84,7 @@ export default class Home extends React.Component {
                             name="verifyImage"
                             className="verify-input"
                             placeholder="请输入图片验证码"
-                            autocomplete="off"
+                            autoComplete="off"
                         />
                         <img
                             alt='图片验证码'
@@ -101,3 +101,13 @@ export default class Home extends React.Component {
         </div>)
     }
 }
+const mapStateToProps = (state)=>({
+    isLogin:state.isLogin
+})
+const mapDisptchToProps = (disptch)=>{
+    return {
+        toLogin:()=>disptch({type:'LOGIN'}),
+        toLogout:()=>disptch({type:'LOGOUT'}),
+    }
+}
+export default connect(mapStateToProps,mapDisptchToProps)(Login);
