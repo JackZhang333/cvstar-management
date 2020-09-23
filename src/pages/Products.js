@@ -197,7 +197,7 @@ export default function Products() {
             <Table
                 columns={columns}
                 dataSource={filtedData}
-                scroll={{ y: 360, x: '80vw' }}
+                scroll = {{y:'calc(100vh - 450px)',x:'80vw'}}
             />
         </div>
     </div>

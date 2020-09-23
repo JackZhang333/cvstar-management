@@ -146,7 +146,7 @@ export default function UserOrders(props){
         <Table 
             columns = {columns} 
             dataSource = {filtedData}
-            scroll = {{y:400,x:'80vw'}}
+            scroll = {{y:'calc(100vh - 400px)',x:'80vw'}}
             />
         </div>
     </div>

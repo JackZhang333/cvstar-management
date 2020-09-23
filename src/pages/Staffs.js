@@ -54,7 +54,7 @@ export default function staffs(){
             <Table 
                 columns = {columns}
                 dataSource = {data}
-                scroll = {{y:360,x:'80vw'}}
+                scroll = {{y:'calc(100vh - 400px)',x:'80vw'}}
             />
         </div>
     </div>
