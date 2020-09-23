@@ -1,6 +1,6 @@
 import React, {useState}from 'react'
 import { Form,Input,DatePicker,Button, Table, Tag, Space, Menu, Dropdown, Modal, message} from 'antd'
-import './user.css'
+
 // import moment from 'moment'
 import {DownOutlined, ExclamationCircleOutlined} from '@ant-design/icons'
 
@@ -111,8 +111,8 @@ export default function Users(props){
     // const [form] = Form.useForm();
    const [filtedData,setFilted] = useState(data);
    const menu = (phone)=>{
-       const url1 = `http://localhost:3000/home/userOrders/${phone}`
-       const url2 = `http://localhost:3000/home/userProducts/${phone}`
+       const url1 = `http://localhost:3030/home/userOrders/${phone}`
+       const url2 = `http://localhost:3030/home/userProducts/${phone}`
        return (
     <Menu>
         <Menu.Item>
