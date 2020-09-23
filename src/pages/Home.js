@@ -40,7 +40,7 @@ export default function Home(props) {
         <Header className="header">
             <div className="logo" />
             <Title level={4} style={{ color: '#fff', marginTop: '18px', float: 'left' }}>便利星管理系统</Title>
-            <Button className="logout" onClick={logout}><LogoutOutlined/>退出登录</Button>
+            <Button className="logout" onClick={logout} ghost><LogoutOutlined/>退出登录</Button>
         </Header>
         <Content style={{ padding: '20px' }} >
 

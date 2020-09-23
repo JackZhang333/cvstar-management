@@ -141,7 +141,7 @@ export default function UserProducts(props) {
         }
     }
     return <div>
-        <div style={{ marginBottom: '20px' }}>
+        <div >
             <Form
                 layout='inline'
                 onFinish={queryData}
