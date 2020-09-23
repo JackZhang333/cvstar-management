@@ -1,0 +1,9 @@
+.ant-upload {
+    width: 128px;
+    height: 128px;
+}
+.upload-content {
+    height: 60px;
+    width: 60px;
+    transform: translateX(-13px);
+}

@@ -10,7 +10,7 @@ export default class Home extends React.Component{
     toLogin = ()=>{
         console.log('跳转到home页')
         console.log(this.props)
-        this.props.history.push('/home')
+        this.props.history.push('/home/users')
     }
     render(){
         return <div>this is Login page

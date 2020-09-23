@@ -1,57 +1,9 @@
 import React, { useState } from 'react'
 import { Form,Input,DatePicker,Button, Table} from 'antd'
 import "./user-orders.css"
+import OrderDetail from '../pageComponents/orderDetail'
 const {RangePicker} = DatePicker;
-const columns = [
-    {
-        title:'订单编号',
-        dataIndex:'orderCode',
-        key:'orderCode'
-    },
-    {
-        title:'用户账户',
-        dataIndex:'phone',
-        key:'phone'
-    },
-    {
-        title:'交易时间',
-        dataIndex:'orderTime',
-        key:'orderTime'
-    },
-    {
-        title:'金额',
-        dataIndex:'totalPrice',
-        key:'totalPrice',
-        render:price=>{
-            return `¥${price}`
-        }
-    },
-    {
-        title:'毛利',
-        dataIndex:'profile',
-        key:'profile',
-        render:profile=>{
-            return `¥${profile}`
-        }
-    },
-    {
-        title:'商品数',
-        dataIndex:'count',
-        key:'count'
-    },
-    {
-        title:'操作',
-        key:'actions',
-        render:(text,record)=>{
-            return <a href={{javascript:0}}
-                onClick = {(e)=>{
-                    e.preventDefault();
-                    console.log(record.orderCode)
-                }}
-            >详情</a>
-        }
-    },
-]
+
 const data = [
     {
         key:'1',
@@ -83,7 +35,61 @@ export default function UserOrders(props){
         orderCode:''
     }
     const [filtedData,setFilted] = useState(data)
-
+    const [detailVisible,setVisible]= useState({
+        visible:false,
+        order:null
+    })
+    const columns = [
+        {
+            title:'订单编号',
+            dataIndex:'orderCode',
+            key:'orderCode'
+        },
+        {
+            title:'用户账户',
+            dataIndex:'phone',
+            key:'phone'
+        },
+        {
+            title:'交易时间',
+            dataIndex:'orderTime',
+            key:'orderTime'
+        },
+        {
+            title:'金额',
+            dataIndex:'totalPrice',
+            key:'totalPrice',
+            render:price=>{
+                return `¥${price}`
+            }
+        },
+        {
+            title:'毛利',
+            dataIndex:'profile',
+            key:'profile',
+            render:profile=>{
+                return `¥${profile}`
+            }
+        },
+        {
+            title:'商品数',
+            dataIndex:'count',
+            key:'count'
+        },
+        {
+            title:'操作',
+            key:'actions',
+            render:(text,record)=>{
+                return <a href={{javascript:0}}
+                    onClick = {(e)=>{
+                        e.preventDefault();
+                        setVisible({visible:true,order:record})
+                        console.log(record.orderCode)
+                    }}
+                >详情</a>
+            }
+        },
+    ]
     const queryData = (values)=>{
         const { orderCode, phone, dateRange} = values
         if(orderCode){
@@ -134,6 +140,7 @@ export default function UserOrders(props){
                     <Button type = "primary" htmlType = "submit">查询</Button>
                 </Form.Item>
            </Form>
+           <OrderDetail detailVisible = {detailVisible} setVisible = {setVisible}/>
         </div>
         <div>
         <Table 
