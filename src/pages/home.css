@@ -19,3 +19,7 @@
   .ant-layout-header {
       padding: 0 20px;
   }
+  .logout {
+      float: right;
+      margin-top:15px;
+  }

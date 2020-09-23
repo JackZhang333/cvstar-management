@@ -1,13 +1,13 @@
 import React from 'react'
 import './home.css'
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu, Typography, Button, Modal } from 'antd';
 import Users from './Users'
 import Products from './Products';
 import UserProducts from './UserProducts';
 import UserOrders from './UserOrders';
 import Staffs from './Staffs';
 import { Route, Switch } from 'react-router-dom';
-
+import {ExclamationCircleOutlined,LogoutOutlined} from '@ant-design/icons'
 const { Title } = Typography
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,18 +17,30 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Home(props) {
 
     const menuClick = (e) => {
-        if(e.key === 'userOrders'||e.key === 'userProducts'){
+        if (e.key === 'userOrders' || e.key === 'userProducts') {
             console.log('get it')
             props.history.push(`/home/${e.key}/0`)
-        }else{
+        } else {
             props.history.push(`/home/${e.key}/`)
         }
-        
+
+    }
+    const logout = () => {
+        Modal.confirm({
+            title: '退出登录',
+            icon: <ExclamationCircleOutlined />,
+            content: `确定要退出当前账号?`,
+            okText: '退出登录',
+            cancelText: '取消',
+            onOk: () => { props.history.push('/')}
+        })
+       
     }
     return <Layout className='home-wrapper'>
         <Header className="header">
             <div className="logo" />
-            <Title level={4} style={{ color: '#fff', marginTop: '18px' }}>便利星管理系统</Title>
+            <Title level={4} style={{ color: '#fff', marginTop: '18px', float: 'left' }}>便利星管理系统</Title>
+            <Button className="logout" onClick={logout}><LogoutOutlined/>退出登录</Button>
         </Header>
         <Content style={{ padding: '20px' }} >
 
@@ -39,7 +51,7 @@ export default function Home(props) {
                         defaultSelectedKeys={['users']}
                         style={{ height: '100%' }}
                         onClick={menuClick}
-                        selectedKeys = {props.location.pathname}
+                        selectedKeys={props.location.pathname}
                     >
                         <Menu.Item key="users">用户管理</Menu.Item>
                         <Menu.Item key="products">商品库</Menu.Item>
@@ -54,7 +66,7 @@ export default function Home(props) {
                 <Content style={{ padding: '0 24px', minHeight: 280 }}>
                     <Switch>
 
-                        <Route path='/home/users' component={()=><Users />} />
+                        <Route path='/home/users' component={() => <Users />} />
                         <Route path='/home/products' component={Products} />
                         <Route path='/home/userProducts/:phone' component={UserProducts} />
                         <Route path='/home/userOrders/:phone' component={UserOrders} />
