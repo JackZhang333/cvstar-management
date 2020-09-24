@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN'
+import './api/http'
 
 ReactDOM.render(
   <ConfigProvider locale = {zhCN}>

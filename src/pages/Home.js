@@ -37,7 +37,11 @@ const Home = function(props) {
             onOk: () => { 
                 //改变数据状态
                 props.toLogout()
-                props.history.push('/login')}
+                props.history.push('/login')
+                //清除本地缓存的token
+                localStorage.removeItem('token')
+            
+            }
         })
        
     }

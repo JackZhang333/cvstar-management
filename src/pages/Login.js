@@ -1,18 +1,23 @@
 import React from 'react';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import './login.css'
 import { message } from 'antd';
+import env from '../envirenment'
+import acount from '../api/acount'
 
 const Login = class extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             msg: 'hahah',
-            verifyImage:'../assets/logo.png'
+            verifyImage: env + '/api/login/verify_image'
         }
+        this.verifyImage = React.createRef()
     }
-    verifyImageClick = ()=>{
-        console.log('请求一个新的校验码')
+
+    verifyImageClick = () => {
+        //上传服务器时，需要手动修改请求的ip地址
+        this.verifyImage.current.src = env + '/api/login/verify_image?time' + new Date()
     }
     submitHandler = (e) => {
         e.preventDefault()
@@ -20,7 +25,7 @@ const Login = class extends React.Component {
         // let self = this;
         let { name, password, verifyImage } = e.target;
         //校验数据的完整性，和正确性
-        if (name.value !== '' && password.value !== '' && verifyImage.name !== '') {
+        if (name.value !== '' && password.value !== '' && verifyImage.value !== '') {
             //校验name是否为手机
             const isPhone = /^1\d{10}$/.test(name.value)
             //校验密码的长度
@@ -29,7 +34,7 @@ const Login = class extends React.Component {
 
             if (isPhone && okLength && okVerify) {
                 //去登录
-                this.toLogin()
+                this.toLogin({ phone: name.value, password: password.value, verifyImage: verifyImage.value })
             } else if (!isPhone) {
                 message.error("请填写正确的账号")
                 return
@@ -44,11 +49,25 @@ const Login = class extends React.Component {
         } else {
             message.error('请填写完整的数据')
         }
-    } 
-    toLogin = () => {
-        //改变store的数据状态
-        this.props.toLogin()
-        this.props.history.push('/home/users')
+    }
+    toLogin = (data) => {
+
+        //请求登录接口
+        acount.toLogin(data, (res) => {
+            console.log(res)
+            if (res.code === 200) {
+               
+                localStorage.setItem('token', res.token)
+                message.success(res.msg)
+
+                //改变store的数据状态
+                this.props.toLogin()
+                this.props.history.push('/home/users')
+            } else {
+                message.warn(res.msg)
+            }
+        })
+
     }
     render() {
         return (<div className="login">
@@ -91,23 +110,24 @@ const Login = class extends React.Component {
                             src={this.state.verifyImage}
                             onClick={this.verifyImageClick}
                             className="verify-image"
+                            ref={this.verifyImage}
                         />
                     </div>
                     <input type="submit" value="登录" className="item-submit" />
                 </form>
-                
+
             </div>
             <p className="copy-right">copyright 2020 杭州便利星信息科技有限公司 浙ICP备19025640</p>
         </div>)
     }
 }
-const mapStateToProps = (state)=>({
-    isLogin:state.isLogin
+const mapStateToProps = (state) => ({
+    isLogin: state.isLogin
 })
-const mapDisptchToProps = (disptch)=>{
+const mapDisptchToProps = (disptch) => {
     return {
-        toLogin:()=>disptch({type:'LOGIN'}),
-        toLogout:()=>disptch({type:'LOGOUT'}),
+        toLogin: () => disptch({ type: 'LOGIN' }),
+        toLogout: () => disptch({ type: 'LOGOUT' }),
     }
 }
-export default connect(mapStateToProps,mapDisptchToProps)(Login);
+export default connect(mapStateToProps, mapDisptchToProps)(Login);

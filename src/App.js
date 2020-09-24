@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 
 function PrivateRoute({component:Component,...rest}){
   return <Route {...rest} render = {
-    (props) => store.getState().isLogin ? <Component {...props}/>:
+    (props) => localStorage.getItem('token') ? <Component {...props}/>:
     <Redirect to={{
       pathname:'/',
       state:{
