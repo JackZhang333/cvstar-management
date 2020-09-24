@@ -16,7 +16,7 @@ const columns = [
         title: '单价',
         dataIndex: 'sPrice',
         key: 'sPrice',
-        render:(price)=>{
+        render: (price) => {
             return `¥${price}`
         }
     },
@@ -24,38 +24,27 @@ const columns = [
         title: '数量',
         dataIndex: 'count',
         key: 'count',
-    },{
+    }, {
         title: '总价',
         dataIndex: 'totalPrice',
         key: 'totalPrice',
-        render:(price)=>{
+        render: (price) => {
             return `¥${price}`
         }
     },
-    
-]
-const data = [
-    {
-        key:'1',
-        productName:'康师傅红烧牛肉面',
-        barCode:'388374623783',
-        sPrice:'4.50',
-        count:2,
-        totalPrice:'9.50'
-    },
-    {
-        key:'2',
-        productName:'康师傅红烧牛肉面',
-        barCode:'388374623783',
-        sPrice:'4.50',
-        count:2,
-        totalPrice:'9.50'
-    },
+
 ]
 export default function OrderDetail(props) {
     const { detailVisible: { visible, order }, setVisible } = props
+    let productsData
+
     const descriptions = () => {
         if (order) {
+            productsData = order.products.map(v => {
+                let { id, name, barCode, price, count, totalPrice } = v;
+                return { key: id, productName: name, barCode, sPrice: price, count, totalPrice }
+            }
+            )
             return (
                 <Descriptions
                     column={2}
@@ -87,12 +76,12 @@ export default function OrderDetail(props) {
             }
         >
             {descriptions()}
-        <div>
-            <Table
-                columns = {columns}
-                dataSource = {data}
-            />
-        </div>
+            <div>
+                <Table
+                    columns={columns}
+                    dataSource={productsData||[]}
+                />
+            </div>
         </Drawer>
     </div>
 }
