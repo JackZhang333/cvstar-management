@@ -52,13 +52,13 @@ export default function ProductAdd(props) {
         <Drawer
             title='新增商品'
             width='720px'
-            onClose={() => props.setVisible(false)}
+            onClose={() => props.setVisible()}
             visible={props.visible}
             bodyStyle={{ paddingBottom: 80 }}
             footer={
                 <div style={{ textAlign: 'right' }}>
-                    <Button onClick={() => props.setVisible(false)} style={{ marginRight: 8 }}>取消</Button>
-                    <Button onClick={() => props.setVisible(false)} type='primary'>确定新增</Button>
+                    <Button onClick={() => props.setVisible()} style={{ marginRight: 8 }}>取消</Button>
+                    <Button onClick={() => props.setVisible()} type='primary'>确定新增</Button>
                 </div>
             }
         >
