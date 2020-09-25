@@ -1,53 +1,27 @@
-import React, { useState } from 'react'
-import { Form, Input, Select, Button, Drawer, Upload, Row, Col, message } from 'antd'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import './product-add.css'
+import React from 'react'
+import { Form, Input, Select, Button, Drawer,Row, Col,message} from 'antd'
+import CvstarUpload from './cvstarUpload';
+import CloudProduct from '../api/cloudProduct'
 const { Option } = Select;
 
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
-}
-function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('你只能上传JPG/PNG格式的图片');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('图片大小需要小于2M')
-    }
-    return isJpgOrPng && isLt2M
-}
+
 
 export default function ProductAdd(props) {
-    const [uploadData, setUpload] = useState({
-        imageUrl: null,
-        loading: false
-    })
-    const handleChange = info => {
-        if (info.file.status === 'uploading') {
-            setUpload({
-                ...uploadData,
-                loading: true
-            })
-        }
-        if (info.file.status === 'done') {
-            getBase64(info.file.originFileObj, imageUrl => {
-                setUpload({
-                    imageUrl,
-                    loading: false
-                })
-            })
-        }
+    const myRef = React.createRef()
+    const onFinish =(values)=>{
+        CloudProduct.addCloudProduct(values,({code,msg})=>{
+            if(code === 1){
+                message.success(msg)
+                //关闭新增弹窗
+                props.setVisible()
+            }else {
+                message.error('新增商品失败！')
+            }
+        })
+        // console.log(values)
+        
     }
-    const uploadButton = (
-        <div className = 'upload-content'>
-            {uploadData.loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div style={{ marginTop: 8 }}>上传图片</div>
-        </div>
-    )
+    
     return <div>
         <Drawer
             title='新增商品'
@@ -58,11 +32,20 @@ export default function ProductAdd(props) {
             footer={
                 <div style={{ textAlign: 'right' }}>
                     <Button onClick={() => props.setVisible()} style={{ marginRight: 8 }}>取消</Button>
-                    <Button onClick={() => props.setVisible()} type='primary'>确定新增</Button>
+                    <Button onClick={() =>{ 
+                        myRef.current.submit()
+                        
+                    }
+                        } type='primary'>确定新增</Button>
                 </div>
             }
         >
-            <Form layout='vertical' requiredMark={false}>
+            <Form 
+            layout='vertical' 
+            requiredMark={"optional"}
+            onFinish = {onFinish}
+            ref = {myRef}
+            >
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
@@ -139,26 +122,13 @@ export default function ProductAdd(props) {
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
-                            style = {{display:'none'}}
+                            
                             name='pic'
                             label='商品图片'
                             rules={[{ required: true, message: '请上传商品图片' }]}
                         >
-                            <Input />
+                            <CvstarUpload />
                         </Form.Item>
-                        <span className="ant-form-item-label">商品图片</span>
-                        <Upload
-                            name='pic'
-                            listType='picture-card'
-                            className='pic-upload'
-                            showUploadList={false}
-                            beforeUpload={beforeUpload}
-                            onChange={handleChange}
-                            action="/api/uploadPic"
-                        >
-                            {uploadData.imageUrl ? <img src={uploadData.imageUrl} alt='商品图片' style={{ width: '100%' }} /> : uploadButton}
-                        </Upload>
-
                     </Col>
                 </Row>
             </Form>

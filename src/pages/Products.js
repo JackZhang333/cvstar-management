@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Form, Input, Select, Button, Table, Tag, Space, Modal, message, } from 'antd'
-import defaultPic from '../assets/product-default.png'
 import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import CloudProduct from '../api/cloudProduct'
 
@@ -9,54 +8,11 @@ import ProductEdit from '../pageComponents/productEdit';
 
 const { Option } = Select;
 
-const data = [
-    {
-        key: '1',
-        pic: defaultPic,
-        productName: '康师傅红烧牛肉面',
-        spec: '106g/包',
-        categary: '方便速食',
-        sPrice: '4.50',
-        pPrice: '2.50',
-        barCode: '2182839384'
-    },
-    {
-        key: '2',
-        pic: defaultPic,
-        productName: '哇哈哈矿泉水',
-        spec: '550ml/瓶',
-        categary: '酒水饮料',
-        sPrice: '2.50',
-        pPrice: '1.50',
-        barCode: '2182839385'
-    },
-    {
-        key: '3',
-        pic: defaultPic,
-        productName: '乐事黄瓜味薯片',
-        spec: '60g/包',
-        categary: '休闲零售',
-        sPrice: '2.50',
-        pPrice: '0.50',
-        barCode: '2182839386'
-    },
-    {
-        key: '4',
-        pic: defaultPic,
-        productName: '哇哈哈矿泉水',
-        spec: '550ml/瓶',
-        categary: '酒水饮料',
-        sPrice: '2.50',
-        pPrice: '1.50',
-        barCode: '2182839387'
-    },
-]
-
 export default class Products extends Component {
     constructor() {
         super()
         this.state = {
-            data,
+            data:[],
             addVisible: false,
             editVisible: {
                 visible: false,
@@ -67,7 +23,7 @@ export default class Products extends Component {
         this.loadData = () => {
             CloudProduct.getAllCloudProducts((data)=>{
                 let {products} = data
-                console.log(products)
+                // console.log(products)
                 this.fethedData = products.map(v=>{
                     let {id} = v
                     return {...v,key:id}
