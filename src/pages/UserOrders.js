@@ -36,7 +36,7 @@ export default class UserOrders extends Component {
                 this.fetchedData = userOrderDatas
 
             })
-            console.log('数据被重新加载了')
+            // console.log('数据被重新加载了')
         }
         
     }
@@ -115,12 +115,12 @@ export default class UserOrders extends Component {
                 let data = arr
                 this.setState({...this.state,data})
             }
-            if (phone) {
+            if (phone&&!dateRange) {
                 let result = this.fetchedData.filter(v => v.phone === phone)
                 let data = result
                 this.setState({...this.state,data})
             }
-            if (dateRange) {
+            if (!phone&&dateRange) {
                 let startDate = new Date(dateRange[0].format('YYYY/MM/DD')).getTime()
                 let endDate = new Date(dateRange[1].format('YYYY/MM/DD')).getTime()
                 let result = this.fetchedData.filter(v => {
@@ -131,9 +131,25 @@ export default class UserOrders extends Component {
                 let data = result
                 this.setState({...this.state,data})
             }
+            //两种情况同时查询
+            if(phone&&dateRange){
+                //过滤账户
+                let result = this.fetchedData.filter(v => v.phone === phone)
+                //过滤时间
+                let startDate = new Date(dateRange[0].format('YYYY/MM/DD')).getTime()
+                let endDate = new Date(dateRange[1].format('YYYY/MM/DD')).getTime()
+
+               result = result.filter(v => {
+                    let orderTime = new Date(v.orderTime).getTime()
+                    return (orderTime <= endDate) && (orderTime >= startDate)
+
+                })
+                let data = result
+                this.setState({...this.state,data})
+            }
             if (!orderCode && !phone && !dateRange) {
 
-                this.setState(this.fetchedData)
+                this.setState({...this.state,data:this.fetchedData})
             }
         }
         return <div>
