@@ -12,7 +12,7 @@ export default class Products extends Component {
     constructor() {
         super()
         this.state = {
-            data:[],
+            data: [],
             addVisible: false,
             editVisible: {
                 visible: false,
@@ -21,21 +21,21 @@ export default class Products extends Component {
         }
         this.fethedData = []
         this.loadData = () => {
-            CloudProduct.getAllCloudProducts((data)=>{
-                let {products} = data
+            CloudProduct.getAllCloudProducts((data) => {
+                let { products } = data
                 // console.log(products)
-                this.fethedData = products.map(v=>{
-                    let {id} = v
-                    return {...v,key:id}
+                this.fethedData = products.map(v => {
+                    let { id } = v
+                    return { ...v, key: id }
                 })
                 this.setState({
                     ...this.state,
-                    data:this.fethedData 
+                    data: this.fethedData
                 })
             })
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         this.loadData()
     }
     render() {
@@ -47,7 +47,7 @@ export default class Products extends Component {
                 render: (text) => {
                     return <img
                         alt='商品图片'
-                        style={{ with: '80px', height: '80px' }}
+                        style={{ width: '80px', height: '80px',overflow:'hidden' }}
                         src={text} />
                 }
             },
@@ -92,15 +92,21 @@ export default class Products extends Component {
                 render: (text, record) => {
                     return <Space>
                         <a href={{ javascript: 0 }} onClick={(e) => {
+                            const fileds = Object.keys(record).map(key => {
+                                return {
+                                    name: key,
+                                    value: record[key]
+                                }
+                            })
                             e.preventDefault()
                             this.setState({
                                 ...this.state,
-                                editVisible:{
-                                visible: true,
-                                product: record
-                            }
+                                editVisible: {
+                                    visible: true,
+                                    product: fileds
+                                }
                             })
-                            console.log(record.barCode)
+                            // console.log(record.barCode)
                         }}>编辑</a>
                         <a href={{ javascript: 0 }} onClick={(e) => {
                             e.preventDefault()
@@ -110,7 +116,17 @@ export default class Products extends Component {
                                 content: `确定要删除商品${record.productName}?`,
                                 okText: '删除商品',
                                 cancelText: '取消',
-                                onOk: () => { message.success('商品删除成功！') }
+                                onOk: () => {
+                                    // console.log('要删除的商品id',record.id)
+                                    CloudProduct.removeCloudProduct({id:record.id},(res)=>{
+                                        const {code,msg} = res
+                                        if(code === 1){
+                                            message.success(msg)
+                                            //刷新页面
+                                            this.loadData() 
+                                        }
+                                    })
+                                    }
                             })
                         }}>删除</a>
                     </Space>
@@ -120,20 +136,20 @@ export default class Products extends Component {
         const queryData = (values) => {
             let { barCode, categary } = values;
             if (barCode) {
-                let result =this.fethedData.find(v => v.barCode === barCode)
+                let result = this.fethedData.find(v => v.barCode === barCode)
                 let arr = [];
                 if (result) {
                     arr.push(result)
                 }
 
-                this.setState({...this.state,data:arr})
+                this.setState({ ...this.state, data: arr })
             }
             if (categary !== '全部分类') {
                 let result = this.fethedData.filter(v => v.categary === categary)
-                this.setState({...this.state,data:result})
+                this.setState({ ...this.state, data: result })
             }
             if (!barCode && categary === '全部分类') {
-                this.setState({...this.state,data:this.fethedData})
+                this.setState({ ...this.state, data: this.fethedData })
             }
         }
         return <div>
@@ -169,14 +185,20 @@ export default class Products extends Component {
                             <Button type="primary" htmlType="submit">查询</Button>
                         </Form.Item>
                     </Form>
-                    <ProductAdd visible={this.state.addVisible} setVisible={() => this.setState({ ...this.state, addVisible: false })} />
-                    <ProductEdit editVisible={this.state.editVisible} setEditVisible={(obj) => this.setState({ ...this.state, editVisible:obj})} />
+                    <ProductAdd 
+                    loadData = {this.loadData}
+                    visible={this.state.addVisible} 
+                    setVisible={() => this.setState({ ...this.state, addVisible: false })} />
+                    <ProductEdit 
+                    loadData = {this.loadData}
+                    editVisible={this.state.editVisible} 
+                    setEditVisible={(obj) => this.setState({ ...this.state, editVisible: obj })} />
                 </div>
             </div>
             <Button
                 type='primary'
                 style={{ marginBottom: '20px' }}
-                onClick={() => this.setState({...this.state,addVisible:true})}
+                onClick={() => this.setState({ ...this.state, addVisible: true })}
             ><PlusOutlined />新增商品</Button>
             <div>
                 <Table

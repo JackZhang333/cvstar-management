@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Upload, message } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import axios from 'axios'
@@ -46,10 +46,15 @@ function getBase64(imgData, callback) {
 export default function CvstarUpload(props) {
 
     const [uploadData, setUpload] = useState({
-        imageUrl: null,
+        imageUrl: props.value,
         loading:false,
     })
-  
+  useEffect(()=>{
+      setUpload({
+          imageUrl:props.value,
+          loading:false
+      })
+  },[props.value])
     const uploadButton = (
         <div className='upload-content'>
             {uploadData.loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -108,7 +113,7 @@ export default function CvstarUpload(props) {
             multiple={false}
             customRequest={customRequest}
         >
-            {uploadData.imageUrl ? <img src={uploadData.imageUrl} alt='商品图片' style={{ width: '100%' }} /> : uploadButton}
+            {uploadData.imageUrl ? <img src={uploadData.imageUrl} alt='商品图片' style={{ transform:'translateX(-15px)',width: '100px' }} /> : uploadButton}
         </Upload>
     </div>
 }

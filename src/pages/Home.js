@@ -20,7 +20,7 @@ const Home = function(props) {
 
     const menuClick = (e) => {
         if (e.key === 'userOrders' || e.key === 'userProducts') {
-            console.log('get it')
+            // console.log('get it')
             props.history.push(`/home/${e.key}/0`)
         } else {
             props.history.push(`/home/${e.key}/`)

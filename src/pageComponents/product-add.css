@@ -7,3 +7,6 @@
     width: 60px;
     transform: translateX(-13px);
 }
+.ant-upload.ant-upload-select-picture-card{
+    overflow: hidden;
+}

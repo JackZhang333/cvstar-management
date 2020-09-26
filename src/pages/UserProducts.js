@@ -13,7 +13,7 @@ const columns = [
         render: (text) => {
             return <img
                 alt='商品图片'
-                style={{ with: '80px', height: '80px',overflow:'hidden' }}
+                style={{ width: '80px', height: '80px',overflow:'hidden' }}
                 src={text} />
         }
     },
@@ -80,7 +80,7 @@ export default class UserProducts extends Component {
         this.fetchedData = []
         this.loadData = () => {
             userProducts.getProducts((data) => {
-                    console.log(data)
+                    // console.log(data)
             //把服务端根据用户map出得空数组去掉，二维数组转换为一维，之后添加上key
             const dropEmptyData = [].concat.apply([],data)
             this.fetchedData = dropEmptyData.map(v=>{

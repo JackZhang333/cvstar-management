@@ -14,6 +14,8 @@ export default function ProductAdd(props) {
                 message.success(msg)
                 //关闭新增弹窗
                 props.setVisible()
+                //刷新数据
+                props.loadData()
             }else {
                 message.error('新增商品失败！')
             }
