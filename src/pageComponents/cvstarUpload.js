@@ -61,13 +61,15 @@ export default function CvstarUpload(props) {
             <div style={{ marginTop: 8 }}>上传图片</div>
         </div>
     )
-    const onChange = ({file})=>{
+    const onChange = ({file,fileList})=>{
         if(file.status === 'uploading'){
             setUpload({
                 imageUrl:null,
                 loading:true
             })
         }
+        // console.log('当前的文件列表：',fileList)
+        // props.onChange({fileList:[...fileList]})
     }
     const customRequest = ({ action, file }) => {
         //检测图片类型和大小
@@ -92,8 +94,9 @@ export default function CvstarUpload(props) {
                 }
                 let { data } = await axios.post(action, imageData)
                 let { pic } = data
+                
                 //拿到从服务器返回的地址
-                // console.log(pic)
+                
                 props.onChange(pic)
             })
         }
@@ -101,17 +104,22 @@ export default function CvstarUpload(props) {
 
 
     }
+    const uploadProps = {
+        nama:'pic',
+        fileList:props.value,
+        listType:'picture-card',
+        className:'pic-upload',
+        showUploadList:false,
+        onStart(){
+          //重写并覆盖onStar方法，否则会出错  
+        },
+        onChange,
+        action:'/api/uploadPic',
+        customRequest,
+    }
     return <div>
         <Upload
-            name='pic'
-            fileList={props.value}
-            listType='picture-card'
-            className='pic-upload'
-            showUploadList={false}
-            onChange = {onChange}
-            action="/api/uploadPic"
-            multiple={false}
-            customRequest={customRequest}
+        {...uploadProps}
         >
             {uploadData.imageUrl ? <img src={uploadData.imageUrl} alt='商品图片' style={{ transform:'translateX(-15px)',width: '100px' }} /> : uploadButton}
         </Upload>
