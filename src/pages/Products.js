@@ -17,22 +17,31 @@ export default class Products extends Component {
             editVisible: {
                 visible: false,
                 product: null,
-            }
+            },
+            loadingData:true,
+            totalData:0
         }
         this.fethedData = []
-        this.loadData = () => {
-            CloudProduct.getAllCloudProducts((data) => {
+        this.loadData = (offSet = 0,limit =100) => {
+            CloudProduct.getAllCloudProducts(offSet,limit,(data) => {
                 let { products } = data
-                // console.log(products)
-                this.fethedData = products.map(v => {
+                // console.log('有多少条数据：'+products.count,"当前的页码:"+offSet,products.rows)
+                this.fethedData = products.rows.map(v => {
                     let { id } = v
                     return { ...v, key: id }
                 })
                 this.setState({
-                    ...this.state,
-                    data: this.fethedData
+                   
+                    data: this.fethedData,
+                    loadingData:false,
+                    totalData:products.count
                 })
             })
+        }
+        this.chagePage = (page,pageSize)=>{
+            let offSet = (page-1)*pageSize
+            let limit = pageSize
+            this.loadData(offSet,limit)
         }
     }
     componentDidMount() {
@@ -202,6 +211,14 @@ export default class Products extends Component {
             ><PlusOutlined />新增商品</Button>
             <div>
                 <Table
+                    loading = {this.state.loadingData}
+                    pagination = {{
+                        defaultPageSize:100,
+                        showSizeChanger:false,
+                        total:this.state.totalData,
+                        showTotal:(total)=>`共${total}个商品`,
+                        onChange:this.chagePage
+                    }}
                     columns={columns}
                     dataSource={this.state.data}
                     scroll={{ y: 'calc(100vh - 450px)', x: '80vw' }}

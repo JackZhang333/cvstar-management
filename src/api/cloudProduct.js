@@ -1,7 +1,7 @@
 import axios from 'axios'
 export default {
-    getAllCloudProducts:async(cb)=>{
-        const {data} = await axios.get('/api/getAllCloudProducts')
+    getAllCloudProducts:async(offSet,limit,cb)=>{
+        const {data} = await axios.post('/api/getAllCloudProducts/',{offSet,limit})
         cb(data)
     },
     addCloudProduct:async(product,cb)=>{
