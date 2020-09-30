@@ -18,12 +18,12 @@ export default class Products extends Component {
                 visible: false,
                 product: null,
             },
-            loadingData:true,
-            totalData:0
+            loadingData: true,
+            totalData: 0
         }
         this.fethedData = []
-        this.loadData = (offSet = 0,limit =100) => {
-            CloudProduct.getAllCloudProducts(offSet,limit,(data) => {
+        this.loadData = (offSet = 0, limit = 100) => {
+            CloudProduct.getAllCloudProducts(offSet, limit, (data) => {
                 let { products } = data
                 // console.log('有多少条数据：'+products.count,"当前的页码:"+offSet,products.rows)
                 this.fethedData = products.rows.map(v => {
@@ -31,17 +31,17 @@ export default class Products extends Component {
                     return { ...v, key: id }
                 })
                 this.setState({
-                   
+
                     data: this.fethedData,
-                    loadingData:false,
-                    totalData:products.count
+                    loadingData: false,
+                    totalData: products.count
                 })
             })
         }
-        this.chagePage = (page,pageSize)=>{
-            let offSet = (page-1)*pageSize
+        this.chagePage = (page, pageSize) => {
+            let offSet = (page - 1) * pageSize
             let limit = pageSize
-            this.loadData(offSet,limit)
+            this.loadData(offSet, limit)
         }
     }
     componentDidMount() {
@@ -56,7 +56,7 @@ export default class Products extends Component {
                 render: (text) => {
                     return <img
                         alt='商品图片'
-                        style={{ width: '80px', height: '80px',overflow:'hidden' }}
+                        style={{ width: '80px', height: '80px', overflow: 'hidden' }}
                         src={text} />
                 }
             },
@@ -127,15 +127,15 @@ export default class Products extends Component {
                                 cancelText: '取消',
                                 onOk: () => {
                                     // console.log('要删除的商品id',record.id)
-                                    CloudProduct.removeCloudProduct({id:record.id},(res)=>{
-                                        const {code,msg} = res
-                                        if(code === 1){
+                                    CloudProduct.removeCloudProduct({ id: record.id }, (res) => {
+                                        const { code, msg } = res
+                                        if (code === 1) {
                                             message.success(msg)
                                             //刷新页面
-                                            this.loadData() 
+                                            this.loadData()
                                         }
                                     })
-                                    }
+                                }
                             })
                         }}>删除</a>
                     </Space>
@@ -145,13 +145,18 @@ export default class Products extends Component {
         const queryData = (values) => {
             let { barCode, categary } = values;
             if (barCode) {
-                let result = this.fethedData.find(v => v.barCode === barCode)
-                let arr = [];
-                if (result) {
-                    arr.push(result)
-                }
+                CloudProduct.getCloudProduct(barCode, (data) => {
+                    // console.log(data)
+                    let { product } =data
+                    let arr = [];
+                    if (product) {
+                        
+                        arr.push({ ...product, key: product.id })
+                    }
 
-                this.setState({ ...this.state, data: arr })
+                    this.setState({ data: arr })
+                })
+
             }
             if (categary !== '全部分类') {
                 let result = this.fethedData.filter(v => v.categary === categary)
@@ -194,14 +199,14 @@ export default class Products extends Component {
                             <Button type="primary" htmlType="submit">查询</Button>
                         </Form.Item>
                     </Form>
-                    <ProductAdd 
-                    loadData = {this.loadData}
-                    visible={this.state.addVisible} 
-                    setVisible={() => this.setState({ ...this.state, addVisible: false })} />
-                    <ProductEdit 
-                    loadData = {this.loadData}
-                    editVisible={this.state.editVisible} 
-                    setEditVisible={(obj) => this.setState({ ...this.state, editVisible: obj })} />
+                    <ProductAdd
+                        loadData={this.loadData}
+                        visible={this.state.addVisible}
+                        setVisible={() => this.setState({ ...this.state, addVisible: false })} />
+                    <ProductEdit
+                        loadData={this.loadData}
+                        editVisible={this.state.editVisible}
+                        setEditVisible={(obj) => this.setState({ ...this.state, editVisible: obj })} />
                 </div>
             </div>
             <Button
@@ -211,13 +216,13 @@ export default class Products extends Component {
             ><PlusOutlined />新增商品</Button>
             <div>
                 <Table
-                    loading = {this.state.loadingData}
-                    pagination = {{
-                        defaultPageSize:100,
-                        showSizeChanger:false,
-                        total:this.state.totalData,
-                        showTotal:(total)=>`共${total}个商品`,
-                        onChange:this.chagePage
+                    loading={this.state.loadingData}
+                    pagination={{
+                        defaultPageSize: 100,
+                        showSizeChanger: false,
+                        total: this.state.totalData,
+                        showTotal: (total) => `共${total}个商品`,
+                        onChange: this.chagePage
                     }}
                     columns={columns}
                     dataSource={this.state.data}

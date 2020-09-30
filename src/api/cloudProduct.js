@@ -15,5 +15,9 @@ export default {
     removeCloudProduct:async(id,cb)=>{
         const {data} = await axios.post('/api/removeCloudProduct',id)
         cb(data)
+    },
+    getCloudProduct:async(barCode,cb)=>{
+        const {data} = await axios.post('/api/getCloudProduct',{barCode})
+        cb(data)
     }
 }
